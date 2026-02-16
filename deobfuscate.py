@@ -780,14 +780,34 @@ def handle_bat_file(deobfuscator, fpath):
 
 if __name__ == "__main__":
     deobfuscator = BatchDeobfuscator()
+    
+    # Запрашиваем путь к файлу у пользователя
     file_path = input("Введите путь к BAT файлу: ").strip()
+    
+    # Удаляем кавычки, если пользователь их ввел
     file_path = file_path.strip('"').strip("'")
+    
+    # Проверяем, существует ли файл
     if not os.path.isfile(file_path):
         print(f"Ошибка: Файл '{file_path}' не найден.")
+        input("\nНажмите Enter для выхода...")
         sys.exit(1)
+    
+    # Обрабатываем файл
     try:
+        print("\n" + "="*50)
+        print("РЕЗУЛЬТАТ РАСШИФРОВКИ:")
+        print("="*50 + "\n")
+        
         for logical_line in deobfuscator.read_logical_line(file_path):
             interpret_logical_line(deobfuscator, logical_line)
+            
+        print("\n" + "="*50)
+        print("РАСШИФРОВКА ЗАВЕРШЕНА")
+        print("="*50)
+        
     except Exception as e:
-        print(f"Ошибка при обработке файла: {e}")
-        sys.exit(1)
+        print(f"\nОшибка при обработке файла: {e}")
+    
+    # Ожидаем нажатия клавиши перед выходом
+    input("\nНажмите Enter для выхода...")
